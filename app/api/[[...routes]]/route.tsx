@@ -112,7 +112,7 @@ app.frame("/check", async (c) => {
       imageAspectRatio: "1:1",
       intents: [
 
-        <Button action="/next/1">Start</Button>,
+        <Button action="/next/0">Start</Button>,
       ],
       title: "Cover Page",
     });
@@ -120,7 +120,9 @@ app.frame("/check", async (c) => {
 });
 app.frame("/next/:id", async (c) => {
   const id = c.req.param('id')
-const action = id<="7"?`/next${id+1}`:"/finish"
+
+const action = Number(id)<=7?`/next/${Number(id)+1}`:"/finish"
+console.log(action)
   return c.res({
   action:action,
     image:
