@@ -74,13 +74,8 @@ app.frame("/:id", (c) => {
   const id = c.req.param("id")
   return c.res({
     action:`/check/${id}`,
-    image:
-    (
-      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-        Verify Your Superfluid Subscription
-      </div>
-    ),
-    imageAspectRatio: "1:1",
+    image:"https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/QmcryXGJTjsLHF6ceHXfscUBBsEVDxzEoFzMgg84JkVvM5"
+    ,
     intents: [
       <TextInput placeholder="Wallet Address (not ens)" />,
       <Button>
@@ -108,9 +103,7 @@ app.frame("/check/:id", async (c) => {
       action:`/start/${folder}/${pages}`,
       image:
       (
-        <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-          Please Subscribe to View
-        </div>
+        "https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/QmSHWyrnT8RnrkTVKdcFMuXQ2GE2vbGGfSy4GmPUyy9mVy"
       ),
 
       intents: [
@@ -126,9 +119,7 @@ app.frame("/check/:id", async (c) => {
   } else{
     return c.res({
       action: `/start/${folder}/${pages}`,
-      image:<div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
-      Subscription Verified
-    </div>
+      image:"https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/Qmb3qFqntyKECbj7mKpBjLHC7UNqMN78zkG3rqhUv3M8SE"
         ,
 
       intents: [
