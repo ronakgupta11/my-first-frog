@@ -99,7 +99,7 @@ app.frame("/check/:id", async (c) => {
   const balance = await getFlowRate(USDCx,sender,receiver);
   console.log("balance",balance)
   
-  if (typeof Number(balance) === "number" && Number(balance) != 0) {
+  if (typeof Number(balance) === "number" && Number(balance) > 0) {
     return c.res({
       action: `/start/${folder}/${pages}`,
       image:"https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/Qmb3qFqntyKECbj7mKpBjLHC7UNqMN78zkG3rqhUv3M8SE"
