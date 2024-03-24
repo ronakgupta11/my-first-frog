@@ -13,7 +13,7 @@ import abi from "./abi.json";
 
 
 const CONTRACT = process.env.CONTRACT_ADDRESS as `0x` || ""
-const USDCx = "0xd04383398dd2426297da660f9cca3d439af9ce1b"
+const USDCx = "	0x46fd5cfb4c12d87acd3a13e92baa53240c661d93"
 
 
 
@@ -32,7 +32,7 @@ const fdk = new PinataFDK({
 // export const runtime = 'edge'
 
 const publicClient = createPublicClient({
-  chain: celoAlfajores,
+  chain: base,
   transport: http(),
 });
 
@@ -178,7 +178,7 @@ const sender = c.inputText
     // @ts-ignore
     chainId: "eip155:42220",
     functionName: "setFlowrate",
-    args: [CELOx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","1902587519"],
+    args: [USDCx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","1902587519"],
     to: CONTRACT,
   });
 });
