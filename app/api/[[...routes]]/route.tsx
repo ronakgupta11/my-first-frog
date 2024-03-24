@@ -90,10 +90,11 @@ app.frame("/:id", (c) => {
     title: "Pinta Hat Store",
   });
 });
+
 app.frame("/check/:id", async (c) => {
   const sender  = c.inputText
   const id = c.req.param("id")
-  const data = await fetch("https://mp7404d75d3a9f171b12.free.beeceptor.com/data")
+  const data = await fetch("https://mp15ec67fccbe98a4af5.free.beeceptor.com/data")
   const res = await data.json()
   const folder = res.folder
   const pages = res.pages
