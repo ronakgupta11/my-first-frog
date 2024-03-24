@@ -82,12 +82,13 @@ app.frame("/:id", (c) => {
         Verify Subscription
       </Button>,
     ],
-    title: "Pinta Hat Store",
+    title: "Start Page",
   });
 });
 
 app.frame("/check/:id", async (c) => {
   const sender  = c.inputText
+  
   const id = c.req.param("id")
   const data = await fetch(`https://api-fxx5ywll2q-uc.a.run.app/frames/${id}`)
   const res = await data.json()
@@ -114,7 +115,7 @@ app.frame("/check/:id", async (c) => {
           Subscribe Me
         </Button.Transaction>,
       ],
-      title: "Pinta Hat Store - SOLD OUT",
+      title: "Subscribe page",
     });
   } else{
     return c.res({
@@ -145,7 +146,7 @@ console.log(action)
       
       <Button>Next</Button>,
     ],
-    title: "Pinta Hat Store",
+    title: "Story Page",
   });
 });
 app.frame("/finish", async (c) => {
@@ -157,7 +158,7 @@ app.frame("/finish", async (c) => {
   </div>,
 
     intents: [
-      <Button.Link href='/'>View Profile</Button.Link>,
+      <Button.Link href='https://warpcast.com/ronakgupta'>View Profile</Button.Link>,
     ],
     title: "Finish Page",
   });
