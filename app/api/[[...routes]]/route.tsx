@@ -5,28 +5,32 @@ import { devtools } from 'frog/dev'
 // import { neynar } from 'frog/hubs'
 import { handle } from 'frog/next'
 import { serveStatic } from 'frog/serve-static'
-import { createWalletClient, http, createPublicClient } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { base,celo, celoAlfajores } from 'wagmi/chains';
+import { http, createPublicClient } from "viem";
+
+import { base } from 'wagmi/chains';
 import { PinataFDK } from "pinata-fdk";
 import abi from "./abi.json";
 
 
 const CONTRACT = process.env.CONTRACT_ADDRESS as `0x` || ""
 const USDCx = "0x46fd5cfb4c12d87acd3a13e92baa53240c661d93"
+// const folderCid = "QmS9v6hWiEDCWhqRK6YnF7tWjgmy1PEPF4MC4uBVGbFHG8"
+// const receiver = "0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161"
+// const flow = ""
+// const pages = 7
 
 
 
-const CELOx = "0x671425ae1f272bc6f79bec3ed5c4b00e9c628240"
+
 const app = new Frog({
   assetsPath: '/',
-  basePath: '/api',
-  // Supply a Hub to enable frame verification.
+  basePath: `/api`,
+  // Supply a Hub to idenable frame verification.
   // hub: neynar({ apiKey: 'NEYNAR_FROG_FM' })
 })
 const fdk = new PinataFDK({
   pinata_jwt: process.env.PINATA_JWT || "",
-  pinata_gateway: "",
+  pinata_gateway: "https://turquoise-healthy-eel-115.mypinata.cloud",
 });
 // Uncomment to use Edge Runtime
 // export const runtime = 'edge'
@@ -66,11 +70,16 @@ async function getFlowRate(token:any,sender:any,receiver:any) {
 //   fdk.analyticsMiddleware({ frameId: "hats-store", customId: "purchased" }),
 // );
 
-app.frame("/", (c) => {
+app.frame("/:id", (c) => {
+  const id = c.req.param("id")
   return c.res({
-    action:"/check",
+    action:`/check/${id}`,
     image:
-      "https://dweb.mypinata.cloud/ipfs/QmZPysm8ZiR9PaNxNGQvqdT2gBjdYsjNskDkZ1vkVs3Tju",
+    (
+      <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+        Verify Your Superfluid Subscription
+      </div>
+    ),
     imageAspectRatio: "1:1",
     intents: [
       <TextInput placeholder="Wallet Address (not ens)" />,
@@ -81,52 +90,64 @@ app.frame("/", (c) => {
     title: "Pinta Hat Store",
   });
 });
-app.frame("/check", async (c) => {
+app.frame("/check/:id", async (c) => {
   const sender  = c.inputText
-  
-
-  const balance = await getFlowRate(USDCx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161");
+  const id = c.req.param("id")
+  const data = await fetch("https://mp7404d75d3a9f171b12.free.beeceptor.com/data")
+  const res = await data.json()
+  const folder = res.folder
+  const pages = res.pages
+  const receiver = res.receiver
+  const flow = res.flow
+  const balance = await getFlowRate(USDCx,sender,receiver);
   console.log("balance",balance)
-
+  
   if (typeof Number(balance) === "number" && Number(balance) === 0) {
     return c.res({
-      action:"/finish",
+      action:`/start/${folder}/${pages}`,
       image:
-        "https://dweb.mypinata.cloud/ipfs/QmeeXny8775RQBZDhSppkRN15zn5nFjQUKeKAvYvdNx986",
+      (
+        <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+          Please Subscribe to View
+        </div>
+      ),
       imageAspectRatio: "1:1",
       intents: [
         <Button.Link href='https://app.superfluid.finance/wrap' >
         Wrap Tokens
       </Button.Link>,
-        <Button.Transaction target='/subscribe' >
+        <Button.Transaction target={`/subscribe/${receiver}/${flow}`} >
           Subscribe Me
         </Button.Transaction>,
       ],
       title: "Pinta Hat Store - SOLD OUT",
     });
-  } else {
+  } else{
     return c.res({
-      action: "/start",
-      image:
-        "https://dweb.mypinata.cloud/ipfs/QmeC7uQZqkjmc1T6sufzbJWQpoeoYjQPxCXKUSoDrXfQFy",
+      action: `/start/${folder}/${pages}`,
+      image:<div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+      Subscription Verified
+    </div>
+        ,
       imageAspectRatio: "1:1",
       intents: [
 
-        <Button action="/next/0">Start</Button>,
+        <Button action={`/next/${folder}/${pages}/0`}>Start</Button>,
       ],
       title: "Cover Page",
     });
   }
 });
-app.frame("/next/:id", async (c) => {
-  const id = c.req.param('id')
+app.frame("/next/:folder/:pages/:no", async (c) => {
+  const no = c.req.param("no")
+  const folder = c.req.param("folder")
+  const pages = c.req.param("pages")
 
-const action = Number(id)<=7?`/next/${Number(id)+1}`:"/finish"
+const action = Number(no)<=Number(pages)?`/next/${folder}/${pages}/${Number(no)+1}`:"/finish"
 console.log(action)
   return c.res({
   action:action,
-    image:
-      "https://dweb.mypinata.cloud/ipfs/QmeUmBtAMBfwcFRLdoaCVJUNSXeAPzEy3dDGomL32X8HuP",
+    image:`https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/${folder}/${Number(no)}.png`,
     imageAspectRatio: "1:1",
     intents: [
       
@@ -136,74 +157,35 @@ console.log(action)
   });
 });
 app.frame("/finish", async (c) => {
+  
   return c.res({
-  action:"/",
     image:
-      "https://dweb.mypinata.cloud/ipfs/QmeUmBtAMBfwcFRLdoaCVJUNSXeAPzEy3dDGomL32X8HuP",
+    <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
+    Finished
+  </div>,
     imageAspectRatio: "1:1",
     intents: [
-      <Button>Reset</Button>,
+      <Button.Link href='/'>View Profile</Button.Link>,
     ],
-    title: "Pinta Hat Store",
+    title: "Finish Page",
   });
 });
-// app.frame("/coupon", async (c) => {
-//   const supply = await remainingSupply();
-//   const address = c.inputText;
-//   const balance = await checkBalance(address);
 
-//   if (
-//     typeof balance === "number" &&
-//     balance < 1 &&
-//     typeof supply === "number" &&
-//     supply > 0
-//   ) {
-//     const { request: mint } = await publicClient.simulateContract({
-//       account,
-//       address: CONTRACT,
-//       abi: abi.abi,
-//       functionName: "mint",
-//       args: [address],
-//     });
-//     const mintTransaction = await walletClient.writeContract(mint);
-//     console.log(mintTransaction);
-
-//     const mintReceipt = await publicClient.waitForTransactionReceipt({
-//       hash: mintTransaction,
-//     });
-//     console.log("Mint Status:", mintReceipt.status);
-//   }
-
-//   return c.res({
-//     action: "/finish",
-//     image:
-//       "https://dweb.mypinata.cloud/ipfs/QmeUmBtAMBfwcFRLdoaCVJUNSXeAPzEy3dDGomL32X8HuP",
-//     imageAspectRatio: "1:1",
-//     intents: [
-//       <Button.Transaction target="/buy/0.0025">
-//         Buy for 0.0025 ETH
-//       </Button.Transaction>,
-//     ],
-//     title: "Pinta Hat Store",
-//   });
-// });
-
-
-app.transaction("/subscribe", async (c) => {
+app.transaction("/subscribe/:rec/:flow", async (c) => {
  
-const sender = c.inputText
+const receiver = c.req.param("rec")
+const flow = c.req.param("flow")
   return c.contract({
     abi: abi,
     // @ts-ignore
     chainId: "eip155:8453",
     functionName: "setFlowrate",
-    args: [USDCx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","3805175"],
+    args: [USDCx,receiver,flow],
     to: CONTRACT,
   });
 });
 
 
-// end of the file exports
 
 export const GET = handle(app);
 export const POST = handle(app);
