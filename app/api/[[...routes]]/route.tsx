@@ -94,7 +94,7 @@ app.frame("/:id", (c) => {
 app.frame("/check/:id", async (c) => {
   const sender  = c.inputText
   const id = c.req.param("id")
-  const data = await fetch("https://mp15ec67fccbe98a4af5.free.beeceptor.com/data")
+  const data = await fetch(`https://api-fxx5ywll2q-uc.a.run.app/frames/${id}`)
   const res = await data.json()
   const folder = res.folder
   const pages = res.pages
@@ -112,7 +112,7 @@ app.frame("/check/:id", async (c) => {
           Please Subscribe to View
         </div>
       ),
-      imageAspectRatio: "1:1",
+
       intents: [
         <Button.Link href='https://app.superfluid.finance/wrap' >
         Wrap Tokens
@@ -130,7 +130,7 @@ app.frame("/check/:id", async (c) => {
       Subscription Verified
     </div>
         ,
-      imageAspectRatio: "1:1",
+
       intents: [
 
         <Button action={`/next/${folder}/${pages}/0`}>Start</Button>,
@@ -149,7 +149,7 @@ console.log(action)
   return c.res({
   action:action,
     image:`https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/${folder}/${Number(no)}.png`,
-    imageAspectRatio: "1:1",
+  
     intents: [
       
       <Button>Next</Button>,
@@ -164,7 +164,7 @@ app.frame("/finish", async (c) => {
     <div style={{ color: 'white', display: 'flex', fontSize: 60 }}>
     Finished
   </div>,
-    imageAspectRatio: "1:1",
+
     intents: [
       <Button.Link href='/'>View Profile</Button.Link>,
     ],
