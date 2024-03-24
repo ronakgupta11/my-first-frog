@@ -106,21 +106,33 @@ app.frame("/check", async (c) => {
     });
   } else {
     return c.res({
-      action: "/finish",
+      action: "/start",
       image:
         "https://dweb.mypinata.cloud/ipfs/QmeC7uQZqkjmc1T6sufzbJWQpoeoYjQPxCXKUSoDrXfQFy",
       imageAspectRatio: "1:1",
       intents: [
-        <Button.Transaction target="/buy/0.0005">
-          Buy for 0.005 ETH
-        </Button.Transaction>,
-        <Button action="/ad">Watch ad for 1/2 off</Button>,
+
+        <Button action="/next/1">Start</Button>,
       ],
-      title: "Pinta Hat Store",
+      title: "Cover Page",
     });
   }
 });
-
+app.frame("/next/:id", async (c) => {
+  const id = c.req.param('id')
+const action = id<="7"?`/next${id+1}`:"/finish"
+  return c.res({
+  action:action,
+    image:
+      "https://dweb.mypinata.cloud/ipfs/QmeUmBtAMBfwcFRLdoaCVJUNSXeAPzEy3dDGomL32X8HuP",
+    imageAspectRatio: "1:1",
+    intents: [
+      
+      <Button>Next</Button>,
+    ],
+    title: "Pinta Hat Store",
+  });
+});
 app.frame("/finish", async (c) => {
   return c.res({
   action:"/",
@@ -173,6 +185,8 @@ app.frame("/finish", async (c) => {
 //     title: "Pinta Hat Store",
 //   });
 // });
+
+
 app.transaction("/subscribe", async (c) => {
  
 const sender = c.inputText
