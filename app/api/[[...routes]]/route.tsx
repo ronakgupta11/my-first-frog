@@ -32,7 +32,7 @@ const fdk = new PinataFDK({
 // export const runtime = 'edge'
 
 const publicClient = createPublicClient({
-  chain: celo,
+  chain: base,
   transport: http(),
 });
 
@@ -85,7 +85,7 @@ app.frame("/check", async (c) => {
   const sender  = c.inputText
   
 
-  const balance = await getFlowRate(CELOx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161");
+  const balance = await getFlowRate(USDCx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161");
   console.log("balance",balance)
 
   if (typeof Number(balance) === "number" && Number(balance) === 0) {
@@ -176,9 +176,9 @@ const sender = c.inputText
   return c.contract({
     abi: abi,
     // @ts-ignore
-    chainId: "eip155:42220",
+    chainId: "eip155:8453",
     functionName: "setFlowrate",
-    args: [CELOx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161",1902587519],
+    args: [USDCx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161",1902587519],
     to: CONTRACT,
   });
 });
