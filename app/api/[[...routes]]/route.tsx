@@ -7,7 +7,7 @@ import { handle } from 'frog/next'
 import { serveStatic } from 'frog/serve-static'
 import { createWalletClient, http, createPublicClient } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { base,celo } from 'wagmi/chains';
+import { base,celo, celoAlfajores } from 'wagmi/chains';
 import { PinataFDK } from "pinata-fdk";
 import abi from "./abi.json";
 
@@ -32,7 +32,7 @@ const fdk = new PinataFDK({
 // export const runtime = 'edge'
 
 const publicClient = createPublicClient({
-  chain: base,
+  chain: celoAlfajores,
   transport: http(),
 });
 
@@ -176,9 +176,9 @@ const sender = c.inputText
   return c.contract({
     abi: abi,
     // @ts-ignore
-    chainId: "eip155:8453",
+    chainId: "eip155:42220",
     functionName: "setFlowrate",
-    args: [USDCx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","1902587519"],
+    args: [CELOx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","1902587519"],
     to: CONTRACT,
   });
 });
