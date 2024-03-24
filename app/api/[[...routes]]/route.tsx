@@ -88,7 +88,7 @@ app.frame("/:id", (c) => {
 
 app.frame("/check/:id", async (c) => {
   const sender  = c.inputText
-  
+
   const id = c.req.param("id")
   const data = await fetch(`https://api-fxx5ywll2q-uc.a.run.app/frames/${id}`)
   const res = await data.json()
@@ -99,14 +99,26 @@ app.frame("/check/:id", async (c) => {
   const balance = await getFlowRate(USDCx,sender,receiver);
   console.log("balance",balance)
   
-  if (typeof Number(balance) === "number" && Number(balance) === 0) {
+  if (typeof Number(balance) === "number" && Number(balance) != 0) {
+    return c.res({
+      action: `/start/${folder}/${pages}`,
+      image:"https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/Qmb3qFqntyKECbj7mKpBjLHC7UNqMN78zkG3rqhUv3M8SE"
+        ,
+    
+      intents: [
+    
+        <Button action={`/next/${folder}/${pages}/0`}>Start</Button>,
+      ],
+      title: "Cover Page",
+    });
+  } else{
     return c.res({
       action:`/start/${folder}/${pages}`,
       image:
       (
         "https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/QmSHWyrnT8RnrkTVKdcFMuXQ2GE2vbGGfSy4GmPUyy9mVy"
       ),
-
+    
       intents: [
         <Button.Link href='https://app.superfluid.finance/wrap' >
         Wrap Tokens
@@ -117,20 +129,17 @@ app.frame("/check/:id", async (c) => {
       ],
       title: "Subscribe page",
     });
-  } else{
-    return c.res({
-      action: `/start/${folder}/${pages}`,
-      image:"https://turquoise-healthy-eel-115.mypinata.cloud/ipfs/Qmb3qFqntyKECbj7mKpBjLHC7UNqMN78zkG3rqhUv3M8SE"
-        ,
-
-      intents: [
-
-        <Button action={`/next/${folder}/${pages}/0`}>Start</Button>,
-      ],
-      title: "Cover Page",
-    });
   }
 });
+
+
+
+
+
+
+
+
+
 app.frame("/next/:folder/:pages/:no", async (c) => {
   const no = c.req.param("no")
   const folder = c.req.param("folder")
