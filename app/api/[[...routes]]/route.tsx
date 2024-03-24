@@ -74,9 +74,9 @@ app.frame("/", (c) => {
     imageAspectRatio: "1:1",
     intents: [
       <TextInput placeholder="Wallet Address (not ens)" />,
-      <Button.Transaction target='/verify'>
+      <Button>
         Verify Subscription
-      </Button.Transaction>,
+      </Button>,
     ],
     title: "Pinta Hat Store",
   });
@@ -95,6 +95,9 @@ app.frame("/check", async (c) => {
         "https://dweb.mypinata.cloud/ipfs/QmeeXny8775RQBZDhSppkRN15zn5nFjQUKeKAvYvdNx986",
       imageAspectRatio: "1:1",
       intents: [
+        <Button.Link href='https://app.superfluid.finance/wrap' >
+        Wrap Tokens
+      </Button.Link>,
         <Button.Transaction target='/subscribe' >
           Subscribe Me
         </Button.Transaction>,
@@ -172,7 +175,7 @@ app.frame("/finish", async (c) => {
 // });
 app.transaction("/subscribe", async (c) => {
  
-
+const sender = c.inputText
   return c.contract({
     abi: abi,
     // @ts-ignore
@@ -182,18 +185,6 @@ app.transaction("/subscribe", async (c) => {
     to: CONTRACT,
   });
 });
-app.transaction("/verify", async (c) => {
- 
-  const sender = c.inputText
-    return c.contract({
-      abi: abi,
-      // @ts-ignore
-      chainId: "eip155:8453",
-      functionName: "getFlowrate",
-      args: [USDCx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161"],
-      to: CONTRACT,
-    });
-  });
 
 
 // end of the file exports
