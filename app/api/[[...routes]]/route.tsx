@@ -74,9 +74,9 @@ app.frame("/", (c) => {
     imageAspectRatio: "1:1",
     intents: [
       <TextInput placeholder="Wallet Address (not ens)" />,
-      <Button>
+      <Button.Transaction target='/verify'>
         Verify Subscription
-      </Button>,
+      </Button.Transaction>,
     ],
     title: "Pinta Hat Store",
   });
@@ -172,7 +172,7 @@ app.frame("/finish", async (c) => {
 // });
 app.transaction("/subscribe", async (c) => {
  
-const sender = c.inputText
+
   return c.contract({
     abi: abi,
     // @ts-ignore
@@ -182,6 +182,18 @@ const sender = c.inputText
     to: CONTRACT,
   });
 });
+app.transaction("/verify", async (c) => {
+ 
+  const sender = c.inputText
+    return c.contract({
+      abi: abi,
+      // @ts-ignore
+      chainId: "eip155:8453",
+      functionName: "getFlowrate",
+      args: [USDCx,sender,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161"],
+      to: CONTRACT,
+    });
+  });
 
 
 // end of the file exports
