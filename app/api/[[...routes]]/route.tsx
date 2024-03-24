@@ -13,7 +13,7 @@ import abi from "./abi.json";
 
 
 const CONTRACT = process.env.CONTRACT_ADDRESS as `0x` || ""
-const USDCx = "	0x46fd5cfb4c12d87acd3a13e92baa53240c661d93"
+const USDCx = "0x46fd5cfb4c12d87acd3a13e92baa53240c661d93"
 
 
 
