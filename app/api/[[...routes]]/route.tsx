@@ -176,9 +176,9 @@ const sender = c.inputText
   return c.contract({
     abi: abi,
     // @ts-ignore
-    chainId: "eip155:42220",
+    chainId: "eip155:8453",
     functionName: "setFlowrate",
-    args: [USDCx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","1902587519"],
+    args: [USDCx,"0xD7D98e76FcD14689F05e7fc19BAC465eC0fF4161","3805175"],
     to: CONTRACT,
   });
 });
